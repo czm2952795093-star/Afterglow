@@ -1,0 +1,107 @@
+from __future__ import annotations
+
+import argparse
+import json
+import logging
+import sys
+
+import uvicorn
+
+from agent import AgentRuntime
+from catalog import MovieCatalog
+from fastapi_app import create_fastapi_app
+from integrations import InternetRuntime
+from image_models import ImageRuntime
+from server import AppContext
+from settings import Settings, is_loopback_host
+from storage import Store
+from voice import VoiceRuntime
+
+
+def build_context(settings: Settings | None = None) -> AppContext:
+    settings = settings or Settings()
+    if settings.local_open_access and not is_loopback_host(settings.host):
+        raise ValueError(
+            "AFTERGLOW_LOCAL_OPEN_ACCESS 只能与 localhost 或回环 IP 一起使用"
+        )
+    store = Store(
+        settings.database_path,
+        settings.invite_pepper,
+        settings.session_secret,
+        journal_mode=settings.sqlite_journal_mode,
+        vfs=settings.sqlite_vfs,
+        required_mount=settings.database_mount or None,
+    )
+    catalog = MovieCatalog(store, settings.movie_seed_path)
+    catalog.load_seed()
+    internet = InternetRuntime(settings, store)
+    voice = VoiceRuntime(settings, store)
+    image = ImageRuntime(settings, store)
+    agent = AgentRuntime(settings, store, catalog, internet)
+    local_account_id = store.ensure_local_account() if settings.local_open_access else None
+    return AppContext(
+        settings=settings,
+        store=store,
+        catalog=catalog,
+        agent=agent,
+        internet=internet,
+        voice=voice,
+        image=image,
+        local_account_id=local_account_id,
+    )
+
+
+def serve(app: AppContext) -> None:
+    model_config = app.agent.model_config()
+    mode = "演示 Agent" if model_config.demo_mode else f"模型 {model_config.model_id}"
+    print(f"余帧Afterglow已启动：http://{app.settings.host}:{app.settings.port}")
+    print(f"管理员后台：http://{app.settings.host}:{app.settings.port}/admin")
+    print(f"当前模式：{mode}")
+    print(f"访问方式：{'本机免认证' if app.settings.local_open_access else '账号密码注册登录与管理员口令'}")
+    print(f"联网电影：{'已接入' if app.internet and app.internet.config().movie_enabled else '未配置'}")
+    print(f"语音交互：{'已接入' if app.voice and app.voice.config().enabled else '未配置'}")
+    print(f"图像模型：{'已接入' if app.image and app.image.config().enabled else '未配置'}")
+    for warning in app.settings.security_warnings():
+        print(f"[安全提醒] {warning}")
+    uvicorn.run(
+        create_fastapi_app(app),
+        host=app.settings.host,
+        port=app.settings.port,
+        log_level="info",
+        server_header=False,
+    )
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="余帧Afterglow AI 电影伙伴")
+    subparsers = parser.add_subparsers(dest="command")
+    subparsers.add_parser("serve", help="启动 Web 服务")
+    generate = subparsers.add_parser("generate-invites", help="在本机批量生成邀请码")
+    generate.add_argument("count", type=int, nargs="?", default=1)
+    subparsers.add_parser("list-invites", help="查看邀请码状态（不显示完整邀请码）")
+    args = parser.parse_args(argv)
+
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s %(name)s %(message)s",
+    )
+    app = build_context()
+    command = args.command or "serve"
+    if command == "serve":
+        serve(app)
+        return 0
+    if command == "generate-invites":
+        codes = app.store.generate_invites(args.count)
+        print("以下邀请码只在本次生成时完整显示，请通过安全渠道发放：")
+        for code in codes:
+            print(code)
+        return 0
+    if command == "list-invites":
+        print(json.dumps(app.store.list_invites(), ensure_ascii=False, indent=2))
+        return 0
+    parser.print_help()
+    return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())
