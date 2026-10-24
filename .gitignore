@@ -21,3 +21,7 @@ AGENTS.md
 *产品设计PRD*.md
 *MVP阶段核心功能PRD.md
 *项目立项报告.md
+
+# 本地工作产物与打包文件，不进入仓库
+*.zip
+余帧Afterglow_打板logo替换版.html

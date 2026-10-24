@@ -94,9 +94,6 @@
 
   function applyPage() {
     const bindings = {
-      ".home-intro .eyebrow": "home.eyebrow",
-      ".home-intro h1": "home.title",
-      ".home-intro > p:last-child": "home.description",
       "#discussion-card .mode-kicker": "home.discussion.kicker",
       "#discussion-card strong": "home.discussion.title",
       "#discussion-card .mode-copy > span:last-child": "home.discussion.description",
@@ -109,7 +106,10 @@
       "#movie-search-form button": "search.submit",
       "#onboarding-search-form button": "search.submit",
     };
-    for (const [selector, key] of Object.entries(bindings)) document.querySelector(selector).textContent = get(key);
+    for (const [selector, key] of Object.entries(bindings)) {
+      const node = document.querySelector(selector);
+      if (node) node.textContent = get(key);
+    }
   }
 
   window.AfterglowContent = {load, get, format, applyPage, validate};

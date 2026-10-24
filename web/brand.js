@@ -3,7 +3,7 @@
   "use strict";
 
   // The presentation asset clips the screenshot background around the original seal.
-  const iconUrl = "/brand/afterglow-seal-clean.svg?v=2";
+  const iconUrl = "/brand/projector-logo.svg?v=3";
   const tagName = "afterglow-icon";
 
   class AfterglowIcon extends HTMLElement {

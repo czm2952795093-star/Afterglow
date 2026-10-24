@@ -308,6 +308,27 @@ function restoreLocation() {
   navigate(["history", "profile"].includes(route) ? route : "home", { replace: true });
 }
 
+
+function animateHomeHero() {
+  const hero = $("#home-hero-type");
+  if (!hero) return;
+  const text = hero.dataset.text || hero.getAttribute("aria-label") || "总有一帧画面，懂你此刻的心情";
+  hero.innerHTML = "";
+  let index = 0;
+  [...text].forEach((char) => {
+    if (char === "\n") {
+      hero.append(document.createElement("br"));
+      return;
+    }
+    const span = document.createElement("span");
+    span.className = `hero-char${char === " " ? " is-space" : ""}`;
+    span.textContent = char === " " ? " " : char;
+    span.style.animationDelay = `${index * 0.1}s`;
+    hero.append(span);
+    index += 1;
+  });
+}
+
 function navigate(view, options = {}) {
   navigationVersion += 1;
   if (state.onboardingStatus !== "completed" && !["onboarding", "profile"].includes(view)) view = "onboarding";
@@ -317,6 +338,7 @@ function navigate(view, options = {}) {
   syncLocation(view === "chat" ? state.mode : view, options.replace);
   $$(".view").forEach((node) => { node.hidden = node.id !== `${view}-view`; });
   document.body.classList.toggle("chat-active", view === "chat");
+  if (view === "home") window.requestAnimationFrame(animateHomeHero);
   closeChatContext(false);
   $$("[data-nav]").forEach((node) => node.classList.toggle("is-active", node.dataset.nav === view));
   if (view === "history") {

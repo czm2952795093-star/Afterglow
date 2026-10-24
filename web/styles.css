@@ -1018,3 +1018,173 @@ textarea.reflection-note:focus { outline: 2px solid color-mix(in srgb, var(--win
 @media (prefers-reduced-motion: reduce) {
   .chat-view, .chat-view *, .chat-view *::before, .conversation-history-dialog[open] { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+/* Afterglow cinematic sign-in - Vetra-inspired original composition */
+#login-view.login-layout{display:flex;flex-direction:column;min-height:100vh;background:#080809;color:#f7f5f3;position:relative;overflow:hidden;isolation:isolate}
+#login-view::before{content:"";position:absolute;inset:0 0 auto;height:1050px;pointer-events:none;z-index:-2;background:radial-gradient(ellipse 65% 24% at 50% 72%,rgba(255,95,24,.28),transparent 83%),linear-gradient(90deg,transparent 0%,rgba(255,255,255,.024) 50%,transparent 100%),repeating-linear-gradient(90deg,transparent 0 18px,rgba(255,255,255,.012) 19px,transparent 20px),#090909}
+#login-view .login-story{background:transparent;min-height:730px;padding:0 7.5%;align-items:center;justify-content:flex-start;text-align:center;overflow:visible}
+#login-view .login-story::after{display:none}
+#login-view .cinematic-nav{width:100%;height:92px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:4;gap:16px}
+#login-view .brand-large{font:700 22px/1.1 system-ui,sans-serif;color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:11px}
+#login-view .brand-large .brand-mark{--afterglow-icon-size:42px;filter:invert(1)}
+#login-view .cinematic-links{display:flex;align-items:center;gap:35px;color:#c1c1c4;font-size:13px}
+#login-view .cinematic-links a{color:inherit;text-decoration:none}
+#login-view .nav-access{border:0;background:#ff7138;color:#fff;padding:13px 23px;border-radius:30px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 3px 24px #ff6d352b}
+#login-view .login-copy{margin:85px 0 0;max-width:980px;z-index:2;position:relative}
+#login-view .login-copy .eyebrow{display:inline-flex;align-items:center;gap:10px;letter-spacing:.02em;text-transform:none;color:#efeff0;background:#202022;border:1px solid #303034;padding:9px 17px;border-radius:999px;font-size:12px;font-weight:500;margin-bottom:28px}
+#login-view .login-copy .eyebrow::after{content:'→';background:#fc7339;border-radius:50%;width:21px;height:21px;display:grid;place-items:center;color:white}
+#login-view .login-copy h1{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:690;max-width:none;font-size:clamp(46px,5.1vw,76px);letter-spacing:-.055em;line-height:1.18;margin:0 0 19px;background:linear-gradient(120deg,#fff 28%,#bcb6b2 85%);background-clip:text;-webkit-background-clip:text;color:transparent}
+#login-view .login-copy p:last-of-type{margin:auto;font-size:17px;line-height:1.85;color:#b9b5b4;max-width:650px}
+#login-view .hero-actions{display:flex;justify-content:center;gap:12px;margin-top:29px;flex-wrap:wrap}
+#login-view .hero-actions button{border-radius:30px;padding:14px 29px;cursor:pointer;font-size:14px;color:#eee;background:#161617;border:1px solid #454044}
+#login-view .hero-actions .hero-primary{background:#ff7138;border-color:#ff7138;color:white;font-weight:700}
+#login-view .orb-glow{position:absolute;z-index:0;pointer-events:none;top:448px;left:50%;transform:translateX(-50%);width:145vw;max-width:1800px;height:670px;border-radius:50% 50% 0 0 / 38% 38% 0 0;background:radial-gradient(ellipse at 50% -11%,rgba(255,102,35,.72),rgba(114,37,10,.19) 38%,#070707 59%);border-top:2px solid rgba(255,104,42,.54);box-shadow:0 -18px 85px 8px rgba(238,73,12,.23);mask-image:linear-gradient(#000 0 72%,transparent 100%)}
+#login-view .login-story blockquote{z-index:2;text-align:center;margin-top:212px;color:#8f8885;font-size:14px;max-width:800px}
+#login-view .login-panel{min-height:0;padding:0 20px 100px;position:relative;z-index:3;display:flex;justify-content:center}
+#login-view .login-card{background:linear-gradient(140deg,rgba(30,30,32,.98),rgba(14,14,15,.98));width:min(100%,480px);border:1px solid #343133;border-radius:24px;padding:32px;box-shadow:0 22px 85px #000b}
+#login-view .persona-lockup{margin-bottom:25px;color:#f6f3f1}
+#login-view .persona-lockup .avatar-large{--afterglow-icon-size:48px;filter:invert(1)}
+#login-view .persona-lockup strong{font:650 21px/1.4 system-ui,sans-serif}
+#login-view .persona-lockup span:last-child{color:#979395}
+#login-view .auth-tabs{background:#101011;border:1px solid #353133;border-radius:13px;padding:4px}
+#login-view .auth-tab{color:#aaa}
+#login-view .auth-tab.is-active{background:#2d2a2b;color:white}
+#login-view label{color:#d9d6d5}
+#login-view input{background:#111113;color:#fff;border-color:#373336}
+#login-view input:focus{border-color:#ff783e;box-shadow:0 0 0 3px #ff783e25}
+#login-view .button-primary{background:#fa7139;border-color:#fa7139;color:#fff}
+#login-view .fine-print,#login-view .form-hint{color:#aaa3a1}
+#login-view .film-grain{pointer-events:none}
+@media(max-width:700px){#login-view .cinematic-links{display:none}#login-view .login-story{padding:0 23px;min-height:665px}#login-view .cinematic-nav{height:79px}#login-view .login-copy{margin-top:94px}#login-view .login-copy h1{font-size:clamp(37px,9vw,53px)}#login-view .login-copy p:last-of-type{font-size:14px}#login-view .orb-glow{top:467px;width:210vw;height:480px}#login-view .login-story blockquote{margin-top:183px}#login-view .login-card{padding:24px}#login-view .login-panel{padding-bottom:50px}}
+
+
+/* Login-after-only palette — no component geometry or positioning overrides */
+html:has(#app-shell:not([hidden])){color-scheme:dark;--paper:#080809;--paper-deep:#151112;--card:#1b1718;--ink:#f7f4f2;--muted:#a99f9b;--line:#453632;--wine:#ff6129;--wine-dark:#fc3b00;--amber:#ff7145;--olive:#c9907e;--shadow:0 20px 65px rgba(0,0,0,.42);--serif:Georgia,"Noto Serif SC","Songti SC",serif;--sans:Inter,"PingFang SC","Microsoft YaHei",sans-serif}
+body:has(#app-shell:not([hidden])){background:#080809;color:#f7f4f2}
+#app-shell{background:radial-gradient(ellipse at 92% 8%,#ff61291a,transparent 35%),radial-gradient(ellipse at 12% 110%,#ff71451a,transparent 42%),#080809;color:#f7f4f2}
+#app-shell .topbar{background:#100e0ef0;border-color:#ffffff22}
+#app-shell :is(.brand,.nav-link,.profile-entry,.chat-header h1,.history-header h1,.profile-identity h1){color:#f7f4f2}
+#app-shell .brand-mark{filter:invert(1)}
+#app-shell .nav-link.is-active{color:#ff956f;border-color:#ff6129}
+#app-shell .count-badge{background:#ff61292a;color:#ff956f}
+#app-shell :is(.button-primary,.send-button){background:#ff6129;color:#fff;border-color:#ff6129}
+#app-shell :is(.button-secondary,.mini-button,.chat-new-button,.chat-icon-button,.history-tab,.profile-entry){background:#1f1919;color:#f4e9e5;border-color:#59403a}
+#app-shell .history-tab.is-active{color:#ff926c;border-color:#ff6129;background:#ff612918}
+#app-shell :is(.mode-card,.weekly-card,.onboarding-selection,.onboarding-card,.profile-taste,.profile-records,.profile-footprints,.profile-settings,.history-card,.history-empty,.chat-context,.chat-starter,.skill-toolbar,.composer-shell,.profile-edit-form,.reflection-paper,.movie-card,.recommendation-card){background-color:#1a1617;background-image:linear-gradient(145deg,#211a19,#151314);border-color:#49332f;color:#f6edeb}
+#app-shell :is(.mode-card,.weekly-card,.onboarding-selection,.profile-taste,.profile-records,.profile-footprints,.profile-settings,.history-empty,.chat-context,.chat-starter,.composer-shell){box-shadow:0 12px 42px #0004}
+#app-shell :is(.mode-kicker,.mode-number,.eyebrow,.mode-arrow){color:#ff956f}
+#app-shell :is(.mode-card,.chat-starter):hover{border-color:#ff7145}
+#app-shell :is(h1,h2,h3,strong){color:#f7f4f2}
+#app-shell :is(p,small,.form-hint){color:inherit}
+#app-shell :is(input,textarea,select){background:#171314;color:#f9f1ef;border-color:#56403a}
+#app-shell :is(input,textarea,select)::placeholder{color:#9d8c85}
+#app-shell :is(input,textarea,select):focus{border-color:#ff7145}
+#app-shell .profile-avatar{background:#a83f25;color:#fff}
+#app-shell .profile-stats button{background:#231b1a;color:#f9f1ee;border-color:#49332f}
+#app-shell .profile-stats button strong{color:#ff946e}
+#app-shell .message.user .message-bubble{background:#e85c30;color:white}
+#app-shell .message.assistant .message-bubble{background:#221c1d;color:#f7f0ef}
+#app-shell .chat-view{background:transparent}
+#app-shell .chat-header{background:#161314;border-color:#49332f}
+#app-shell .chat-messages{color:#f7f0ee}
+#app-shell .chat-welcome h2 em{color:#ff956f}
+#app-shell .composer textarea{background:transparent}
+#app-shell .chat-context{background:#1b1718}
+#app-shell .toast{background:#30201b;color:#fff}
+dialog{background:linear-gradient(135deg,#261b1a,#141213);color:#f7f1ee;border-color:#51352e}
+dialog::backdrop{background:#000b}
+dialog :is(input,textarea,select){background:#171314;color:#fff;border-color:#513c38}
+dialog .button-primary{background:#ff6129;color:#fff;border-color:#ff6129}
+dialog .button-secondary{background:#272022;color:#fff;border-color:#59413b}
+dialog :is(h2,h3,label,strong){color:#f7f1ee}
+
+/* --- cinematic home hero typing effect --- */
+#app-shell .home-intro.cinematic-hero-intro{
+  position:relative;
+  z-index:1;
+  max-width:min(1120px,92vw);
+  min-height:clamp(260px,46vh,480px);
+  margin:0 auto 36px;
+  padding:clamp(54px,8vh,110px) 0 clamp(12px,4vh,24px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+#app-shell .home-intro.cinematic-hero-intro::before{
+  content:"";
+  position:absolute;
+  inset:auto 10% 5% 10%;
+  height:min(260px,36vh);
+  z-index:-2;
+  border-radius:999px;
+  background:radial-gradient(ellipse at center, rgba(255,97,41,.26) 0%, rgba(252,59,0,.16) 34%, rgba(255,113,69,.08) 54%, transparent 72%);
+  filter:blur(26px);
+  pointer-events:none;
+}
+#app-shell .home-intro.cinematic-hero-intro::after{
+  content:"";
+  position:absolute;
+  top:-16%;
+  left:10%;
+  right:10%;
+  bottom:18%;
+  z-index:-3;
+  background:radial-gradient(circle at 50% 45%, rgba(255,255,255,.05), transparent 48%);
+  pointer-events:none;
+}
+#app-shell .home-intro .type-hero{
+  margin:0;
+  max-width:8.6ch;
+  white-space:pre-wrap;
+  font-family:"Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size:clamp(48px,8vw,108px);
+  line-height:1.04;
+  font-weight:800;
+  letter-spacing:-0.08em;
+  background:linear-gradient(110deg,#ffffff 6%, #ffe9e0 45%, #ffb8a0 100%);
+  color:transparent;
+  -webkit-background-clip:text;
+  background-clip:text;
+  text-wrap:balance;
+  filter:drop-shadow(0 10px 42px rgba(252,59,0,.12));
+}
+#app-shell .home-intro .type-hero .hero-char{
+  display:inline-block;
+  opacity:0;
+  transform:translateY(28px) scale(.92);
+  will-change:transform, opacity;
+  animation:afterglowHeroCharIn .56s cubic-bezier(.2,.7,.16,1) forwards;
+}
+#app-shell .home-intro .type-hero .hero-char.is-space{min-width:.36em}
+@keyframes afterglowHeroCharIn{
+  from{opacity:0;transform:translateY(28px) scale(.92);filter:blur(6px)}
+  55%{opacity:1}
+  to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+}
+@media (max-width: 700px){
+  #app-shell .home-intro.cinematic-hero-intro{min-height:230px;padding-top:52px}
+  #app-shell .home-intro .type-hero{font-size:clamp(38px,12vw,62px);max-width:7.8ch;line-height:1.08}
+}
+
+/* Caption relocated beneath the primary hero CTA. */
+.login-copy .hero-caption { margin: 22px auto 0; text-align: center; }
+
+/* Place two-line description entirely below the orange arc; preserve other layout */
+#login-view .login-story .hero-caption {
+  position: absolute;
+  z-index: 3;
+  top: 526px;
+  left: 0;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0 20px;
+  text-align: center;
+  color: #e5c7bb;
+  font-size: 17px;
+  line-height: 1.85;
+  pointer-events: none;
+}
+@media(max-width:700px){
+  #login-view .login-story .hero-caption{top:541px;padding:0 20px;font-size:13px;line-height:1.75}
+}
