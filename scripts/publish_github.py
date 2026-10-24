@@ -75,7 +75,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--push", action="store_true")
     parser.add_argument("-m", "--message", default="Update Afterglow")
-    parser.add_argument("--repo", default="Ziven/afterglow")
+    parser.add_argument("--repo", default="czm2952795093-star/Afterglow")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     with tempfile.TemporaryDirectory(prefix="afterglow-publish-") as temporary:

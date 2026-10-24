@@ -57,8 +57,8 @@ AI 伙伴叫「小帧」：平等、克制、诚实，明确自己的 AI 身份�
 要求 **Python 3.12**、**Node.js 24 LTS**、npm 和 [uv](https://docs.astral.sh/uv/)。
 
 ```bash
-git clone https://github.com/<你的用户名>/<仓库名>.git
-cd <仓库名>
+git clone https://github.com/czm2952795093-star/Afterglow.git
+cd Afterglow
 npm --prefix frontend ci
 npm --prefix frontend run build
 
