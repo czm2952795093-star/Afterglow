@@ -45,8 +45,17 @@ jobs:
           npm --prefix frontend run verify:parity
       - name: Build release bundle
         run: python scripts/build_release.py "$RUNNER_TEMP/afterglow-release.tar.gz"
+      - name: Check deployment secrets
+        id: deploy-check
+        run: |
+          if [ -n "${{ secrets.AFTERGLOW_DEPLOY_KEY }}" ] && [ -n "${{ vars.AFTERGLOW_HOST }}" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::未配置部署凭据（AFTERGLOW_DEPLOY_KEY / AFTERGLOW_HOST），跳过生产部署。"
+          fi
       - name: Deploy main to production
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        if: steps.deploy-check.outputs.ready == 'true' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         env:
           SSH_KEY: ${{ secrets.AFTERGLOW_DEPLOY_KEY }}
           SSH_KNOWN_HOSTS: ${{ secrets.AFTERGLOW_KNOWN_HOSTS }}
