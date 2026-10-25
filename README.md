@@ -48,9 +48,9 @@ AI 伙伴叫「小帧」：平等、克制、诚实，明确自己的 AI 身份�
 
 ## 界面预览
 
-| 首页 | 聊电影 | 找电影 |
-| :---: | :---: | :---: |
-| ![首页](product-intro-assets/01-home.png) | ![聊电影](product-intro-assets/02-chat.png) | ![找电影](product-intro-assets/03-recommend.png) |
+| 聊电影 | 找电影 |
+| :---: | :---: |
+| ![聊电影](product-intro-assets/02-chat.png) | ![找电影](product-intro-assets/03-recommend.png) |
 
 ## 快速开始
 
