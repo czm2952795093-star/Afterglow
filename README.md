@@ -8,10 +8,13 @@
 
 一个真正记得你电影经验的 AI 电影伙伴
 
+🔗 **[在线体验 · 立即试用 →](https://scjr6ugp5e1uskemefhmn.apigateway-cn-beijing.volceapi.com/)**
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-8f2e2b)](LICENSE)
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=next.js&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-003B57?logo=sqlite&logoColor=white)
+[![在线体验](https://img.shields.io/badge/在线体验-立即试用-ff6129)](https://scjr6ugp5e1uskemefhmn.apigateway-cn-beijing.volceapi.com/)
 
 </div>
 
