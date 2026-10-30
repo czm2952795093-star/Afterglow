@@ -36,7 +36,6 @@
           <a class="brand brand-large" href="#login" aria-label="余帧Afterglow"><afterglow-icon class="brand-mark" aria-hidden="true"></afterglow-icon><span>余帧 Afterglow</span></a>
         </div>
         <div class="login-copy">
-          <p class="eyebrow">你的 AI 电影伙伴 · 每一帧都值得被记住</p>
           <h1 id="login-title">电影散场以后，<br>故事才刚刚开始。</h1>
           <div class="hero-actions"><button class="hero-primary" type="button" onclick="document.getElementById('login-panel-anchor').scrollIntoView({behavior:'smooth'})">开启我的电影旅程 ↗</button></div>
         </div>
@@ -95,12 +94,12 @@
         </button>
         <button id="profile-entry" class="profile-entry" data-nav="profile" type="button" aria-label="打开我的主页">
           <span id="profile-entry-avatar" class="profile-avatar" data-avatar="ticket" aria-hidden="true">映</span>
-          <span id="profile-entry-name">我的主页</span>
+          <span id="profile-entry-name">我的</span>
         </button>
         </div>
         <nav aria-label="主要导航">
           <button class="nav-link is-active" data-nav="home" type="button">此刻</button>
-          <button class="nav-link" data-nav="history" type="button">我的电影 <span id="watched-count" class="count-badge">0</span></button>
+          <button class="nav-link" data-nav="history" type="button">片单 <span id="watched-count" class="count-badge">0</span></button>
         </nav>
         <div class="account-actions">
           <button id="feedback-button" class="feedback-button" hidden type="button" aria-haspopup="dialog" aria-controls="feedback-dialog">反馈</button>
@@ -228,12 +227,12 @@
             <div>
               <span class="eyebrow">聊天模式</span>
               <strong id="active-skill-name">闲聊模式</strong>
-              <span id="active-skill-description">默认自由聊天；需要时再选择 Skill。</span>
+              <span id="active-skill-description">自由聊天，从片名、情绪或刚刚看完的一幕开始。</span>
             </div>
             <div id="discussion-skill-actions" class="skill-toolbar-actions">
               <button id="casual-chat-mode" class="mini-button" type="button" aria-pressed="true">闲聊模式</button>
-              <button class="mini-button" type="button" data-activate-skill="structured_review_creation">创作发布内容</button>
-              <button class="mini-button" type="button" data-activate-skill="viewing_cognition_archive">记录重看认识</button>
+              <button class="mini-button" type="button" data-activate-skill="structured_review_creation">新片内容创作</button>
+              <button class="mini-button" type="button" data-activate-skill="viewing_cognition_archive">多次观影认知沉淀</button>
               <button id="view-skill-records" class="mini-button" type="button" hidden>查看已存记录</button>
             </div>
           </section>
@@ -267,12 +266,12 @@
           <div id="profile-content" hidden>
             <header class="profile-identity">
               <span id="profile-avatar" class="profile-avatar profile-avatar-large" data-avatar="ticket" aria-hidden="true">映</span>
-              <div class="profile-intro"><p class="eyebrow">电影散场，故事留下</p><h1 id="profile-title">我的主页</h1><p id="profile-bio"></p></div>
+              <div class="profile-intro"><p class="eyebrow">电影散场，故事留下</p><h1 id="profile-title">我的</h1><p id="profile-bio"></p></div>
               <button id="profile-edit" class="button button-secondary" type="button" aria-expanded="false" aria-controls="profile-form">编辑资料</button>
             </header>
             <form id="profile-form" class="profile-edit-form" hidden>
               <fieldset><legend>选一个头像</legend><div class="profile-avatar-options">
-                <label><input type="radio" name="avatar_key" value="ticket" checked><span class="profile-avatar" data-avatar="ticket" aria-hidden="true">映</span><span>票根</span></label>
+                <label><input type="radio" name="avatar_key" value="ticket" checked><span class="profile-avatar" data-avatar="ticket" aria-hidden="true">映</span><span>打板</span></label>
                 <label><input type="radio" name="avatar_key" value="screen"><span class="profile-avatar" data-avatar="screen" aria-hidden="true">幕</span><span>银幕</span></label>
                 <label><input type="radio" name="avatar_key" value="moon"><span class="profile-avatar" data-avatar="moon" aria-hidden="true">月</span><span>月色</span></label>
                 <label><input type="radio" name="avatar_key" value="flower"><span class="profile-avatar" data-avatar="flower" aria-hidden="true">花</span><span>花间</span></label>
@@ -317,7 +316,7 @@
           <div class="history-header">
             <div>
               <p class="eyebrow">你的电影轨迹</p>
-              <h1>我的电影</h1>
+              <h1>片单</h1>
               <p>这不是一份考勤表，只是让我们下次聊起时不会从头认识。</p>
             </div>
             <div class="history-actions">
