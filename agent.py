@@ -1055,6 +1055,7 @@ class AgentRuntime:
                 mode, message, selected_movie, spoilers_allowed, candidates,
                 str(skill["skill_key"]) if skill else None,
                 skill_runtime_context,
+                history,
             )
 
         tools = BoundMovieTools(self.store, self.catalog, account_id, self.internet)
@@ -1588,6 +1589,7 @@ class AgentRuntime:
         candidates: list[dict[str, Any]],
         skill_key: str | None = None,
         skill_runtime: dict[str, Any] | None = None,
+        history: list[dict[str, str]] | None = None,
     ) -> str:
         runtime = dict(skill_runtime or {})
         if mode == "discussion":
@@ -1659,17 +1661,77 @@ class AgentRuntime:
                 )
             if skill_key == VIEWING_COGNITION_SKILL:
                 return cls._demo_cognition_response(title, message, runtime)
-            themes = "、".join(selected_movie.get("themes", [])[:2])
-            if any(word in message for word in ("难受", "难过", "压抑", "堵", "伤心")):
-                opening = "这种难受不像是电影散场就会马上过去的那种。"
-            elif any(word in message for word in ("喜欢", "感动", "震撼", "好看")):
-                opening = "嗯，我能听出来它不是只让你觉得“好看”，而是真的留下了点东西。"
-            elif any(word in message for word in ("看不懂", "没懂", "困惑", "为什么")):
-                opening = "有些困惑反而是这部片最值得聊的入口。"
+            themes = "、".join(selected_movie.get("themes", [])[:2]) or "人物和选择"
+            clean_message = re.sub(r"\s+", " ", message).strip()
+            focus = re.sub(rf"《?{re.escape(title)}》?", "", clean_message).strip(" ，。！？,.!?：:")
+            focus = (focus or clean_message or "这部电影")[:72]
+            recent_history = [
+                item for item in (history or [])
+                if isinstance(item, dict) and str(item.get("content", "")).strip()
+            ][-12:]
+            recent_assistant = {
+                str(item.get("content", "")).strip()
+                for item in recent_history
+                if item.get("role") == "assistant"
+            }
+            previous_user = next(
+                (
+                    str(item.get("content", "")).strip()[:48]
+                    for item in reversed(recent_history)
+                    if item.get("role") == "user"
+                    and str(item.get("content", "")).strip() != clean_message
+                ),
+                "",
+            )
+            spoiler_note = "先不碰关键结局" if not spoilers_allowed else "可以直接聊到结局"
+
+            if any(word in message for word in ("难受", "难过", "压抑", "堵", "伤心", "哭")):
+                candidates_reply = [
+                    f"你说的是“{focus}”。先别急着把这种感觉解释掉；《{title}》碰到{themes}时，确实可能让人不舒服。具体是哪一幕把这股劲带出来的？",
+                    f"“{focus}”听起来不是一句看完就算了的评价。我们{spoiler_note}：你更难受的是人物受了什么，还是他最后做出的选择？",
+                    f"这次我先接你说的“{focus}”，不替你概括成标准感受。它更像悲伤、遗憾，还是一种说不上来的憋闷？",
+                ]
+            elif any(word in message for word in ("不喜欢", "不好看", "无聊", "讨厌", "烂", "一般")):
+                candidates_reply = [
+                    f"那就不用替《{title}》找补。你说“{focus}”，我更想知道它是哪一步把你推出去了：人物、节奏，还是表达得太用力？",
+                    f"“{focus}”这个判断可以直说。放在{themes}这条线上，你是不认同它的处理，还是根本没被它打动？",
+                    f"不喜欢也比客套地说“还行”有得聊。我们{spoiler_note}，挑一个最让你出戏的地方说说。",
+                ]
+            elif any(word in message for word in ("喜欢", "感动", "震撼", "好看", "惊喜")):
+                candidates_reply = [
+                    f"你说“{focus}”，这次我不只回一句“确实好看”。放在《{title}》的{themes}里，真正打中你的是人物，还是它处理关系的方式？",
+                    f"“{focus}”比单纯打高分更有意思。我们{spoiler_note}：有哪个瞬间让你觉得这部片一下子立住了？",
+                    f"听出来了，“{focus}”不是一个抽象标签。要我接着聊，我会先盯住《{title}》怎么把{themes}落到人物身上。你最想从哪一段开始？",
+                ]
+            elif any(word in message for word in ("为什么", "怎么", "看不懂", "没懂", "困惑", "什么意思")):
+                candidates_reply = [
+                    f"你问的是“{focus}”。我会先把它放回《{title}》的{themes}里看，但不想没确认具体场面就硬编答案。你指的是哪一段？",
+                    f"“{focus}”这里确实可能有不止一种解释。我们{spoiler_note}，你把对应的情节或人物告诉我，我再和你拆开聊。",
+                    f"“{focus}”值得具体一点聊。只靠片名和主题容易说成空话；你问的是人物动机、故事逻辑，还是结局的意思？",
+                ]
+            elif any(word in message for word in ("人物", "角色", "主角", "爸爸", "妈妈", "孩子", "家人")):
+                candidates_reply = [
+                    f"那就先盯住你说的“{focus}”，不急着评价整部《{title}》。你对这个人物是理解更多，还是不认同更多？",
+                    f"聊人物就好办了。放在{themes}里，他做的事可能说得通，但不一定让人接受。你卡住的是哪一个选择？",
+                    f"“{focus}”把话题落到人身上了。我们{spoiler_note}，你说一个具体动作，我也说说我的判断。",
+                ]
             else:
-                opening = "我先不急着替这部电影下结论，想听听它在你这里留下了什么。"
-            spoiler_note = "我会先避开关键结局。" if not spoilers_allowed else "我们可以直接聊到结局。"
-            return f"{opening}《{title}》里关于{themes}的东西，很容易和个人感受缠在一起。{spoiler_note}你现在最放不下的是哪个人，还是哪个选择？"
+                continuity = (
+                    f"你前面提到“{previous_user}”，现在又说“{focus}”。"
+                    if previous_user else f"你这次说的是“{focus}”。"
+                )
+                candidates_reply = [
+                    f"{continuity}我先接这一句本身，不把话题重新塞回固定模板：这是哪个具体瞬间让你有这种想法的？",
+                    f"{continuity}先顺着这句话聊。《{title}》碰到{themes}时未必只有一种答案；你更想谈人物、情节，还是自己的感受？",
+                    f"{continuity}这个点可以展开。我们{spoiler_note}，你往下多说一句，我会沿着你这一句接，不另起一套客套话。",
+                ]
+
+            start = sum(ord(char) for char in clean_message) % len(candidates_reply)
+            for offset in range(len(candidates_reply)):
+                reply = candidates_reply[(start + offset) % len(candidates_reply)]
+                if reply not in recent_assistant:
+                    return reply
+            return candidates_reply[(start + 1) % len(candidates_reply)]
 
         if not candidates:
             return "这次没有找到同时满足条件、又不在看过列表里的片。你愿意优先放宽片长、类型，还是情绪强度？"
