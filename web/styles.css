@@ -1545,6 +1545,13 @@ dialog :is(.utility-dialog-body,.dialog-actions){border-color:#ffffff20}
 .taste-dialog .taste-dimension .direction{color:#ff865e;font-weight:600}
 .taste-dialog .taste-dimension .text-button{color:#ff9b78}
 .taste-dialog .taste-dimension .text-button:hover{color:#ffc0ad}
+.conversation-history-dialog .conversation-history-item{background:#1b1718;border-color:#49332f;color:#f7f1ee}
+.conversation-history-dialog .conversation-history-copy h3{color:#fff}
+.conversation-history-dialog .conversation-history-copy > p:not(.conversation-history-preview){color:#d7cfcc}
+.conversation-history-dialog .conversation-history-preview{color:#eee8e5}
+.conversation-history-dialog .conversation-history-actions .button-secondary{background:#2a2223;border-color:#5d4540;color:#f7f1ee}
+.conversation-history-dialog .conversation-history-actions .button-secondary:hover{background:#35292a;border-color:#ff865e}
+.conversation-history-dialog .conversation-history-actions .danger-text{color:#ff8f6b}
 #app-shell .toast,.toast{background:#2a1a14;border:1px solid #ff71454f;color:#fff}
 /* soften all legacy light theme surfaces, including dynamically populated cards */
 #app-shell :is(.history-card,.movie-card,.onboarding-card,.recommendation-card,.taste-dimension,.reflection-card,.record-item,.skill-record-item,.profile-record-item,.weekly-movie){background:#1b1718!important;border-color:#ffffff24!important;color:#f4ece9!important}
