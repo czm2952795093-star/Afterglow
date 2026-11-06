@@ -1536,6 +1536,11 @@ dialog :is(.utility-dialog-body,.dialog-actions){border-color:#ffffff20}
 #app-shell :is(.history-card,.movie-card,.onboarding-card,.recommendation-card,.taste-dimension,.reflection-card,.record-item,.skill-record-item,.profile-record-item,.weekly-movie){background:#1b1718!important;border-color:#ffffff24!important;color:#f4ece9!important}
 #app-shell :is(.movie-card,.history-card,.onboarding-card) :is(h2,h3,strong){color:#fff}
 #app-shell :is(.onboarding-selected,.selected-movie-list,.search-results){color:#eee}
+#app-shell .selected-movie,
+#app-shell .selected-movie-head strong,
+#app-shell .selected-movie-head button,
+#app-shell .selected-movie .sentiment-options button{color:#111}
+#app-shell .selected-movie .sentiment-options button[aria-pressed="true"]{color:var(--wine)}
 #app-shell .chat-artifact-button{color:#ede7e3;border-color:#ffffff20}
 @media(max-width:700px){#app-shell .home-intro{padding-top:44px}#app-shell .home-intro h1{font-size:39px}#app-shell .mode-card{min-height:235px;border-radius:20px}#app-shell .topbar{background:#0b0a0be9}#app-shell .chat-header{border-radius:0}#app-shell .chat-context{background:#171416}#app-shell .history-empty{padding:50px 16px}}
 
