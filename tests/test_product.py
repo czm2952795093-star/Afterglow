@@ -946,6 +946,33 @@ class AgentConfigurationTests(ProductFixture):
         })
         self.assertEqual(runtime.movie_state_model_id(), "claude-haiku-4-5-20251001")
 
+    def test_movie_state_agent_uses_kimi_k3_compatible_parameters(self) -> None:
+        runtime = AgentRuntime(
+            replace(self.settings, movie_state_model_id="kimi-k3"),
+            self.store,
+            self.catalog,
+        )
+        runtime.save_model_config({
+            "provider": "openai_compatible",
+            "api_key": "sk-kimi-classifier-test",
+            "model_id": "kimi-k3",
+            "base_url": "https://api.moonshot.cn/v1",
+            "timeout_seconds": 90,
+            "max_tokens": 4096,
+            "temperature": 1,
+        })
+        movie = self.store.movie("us-interstellar-2014") or {}
+        with patch.object(ModelMessageClient, "create", autospec=True, return_value={
+            "content": [{"type": "text", "text": '{"state":"watchlist","evidence":"我想看这部"}'}],
+            "usage": {},
+        }) as create:
+            self.assertEqual(runtime.classify_movie_state("我想看这部", movie), "watchlist")
+            classifier = create.call_args.args[0].config
+            self.assertEqual(classifier.model_id, "kimi-k3")
+            self.assertEqual(classifier.temperature, 1)
+            self.assertEqual(classifier.max_tokens, 2048)
+            self.assertEqual(classifier.timeout_seconds, 60)
+
     def test_admin_can_disable_and_reenable_automatic_movie_state(self) -> None:
         runtime = AgentRuntime(self.settings, self.store, self.catalog)
         config = {
