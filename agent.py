@@ -584,8 +584,12 @@ class AgentRuntime:
             "timeout_seconds": saved.get(
                 "model_timeout_seconds", str(self.settings.model_timeout_seconds)
             ),
-            "max_tokens": saved.get("model_max_tokens", "1200"),
-            "temperature": saved.get("model_temperature", "0.7"),
+            "max_tokens": saved.get(
+                "model_max_tokens", str(self.settings.model_max_tokens)
+            ),
+            "temperature": saved.get(
+                "model_temperature", str(self.settings.model_temperature)
+            ),
         }
         if overrides:
             for key in (

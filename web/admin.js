@@ -31,6 +31,7 @@ const BASE_URL_PRESETS = {
       { label: "Google Gemini", value: "https://generativelanguage.googleapis.com/v1beta/openai" },
       { label: "智谱 BigModel", value: "https://open.bigmodel.cn/api/paas/v4" },
       { label: "阿里云百炼（默认空间）", value: "https://dashscope.aliyuncs.com/compatible-mode/v1" },
+      { label: "Kimi Moonshot（国内开放平台）", value: "https://api.moonshot.cn/v1" },
       { label: "MiniMax", value: "https://api.minimaxi.com/v1" },
       { label: "火山方舟", value: "https://ark.cn-beijing.volces.com/api/v3" },
       { label: "硅基流动", value: "https://api.siliconflow.cn/v1" },
@@ -107,6 +108,10 @@ function applyBaseUrlSelection(kind) {
   const custom = select.value === CUSTOM_BASE_URL;
   if (!custom) {
     input.value = select.value;
+    if (kind === "model" && input.value === "https://api.moonshot.cn/v1") {
+      $("#model-id").value = "kimi-k3";
+      $("#model-temperature").value = "1";
+    }
     const targetProvider = ["model", "voice"].includes(kind)
       ? select.selectedOptions[0]?.dataset.provider
       : "";
