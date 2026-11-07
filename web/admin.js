@@ -110,6 +110,7 @@ function applyBaseUrlSelection(kind) {
     input.value = select.value;
     if (kind === "model" && input.value === "https://api.moonshot.cn/v1") {
       $("#model-id").value = "kimi-k3";
+      $("#model-max-tokens").value = "4096";
       $("#model-temperature").value = "1";
     }
     const targetProvider = ["model", "voice"].includes(kind)

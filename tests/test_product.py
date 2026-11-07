@@ -1102,6 +1102,54 @@ class AgentConfigurationTests(ProductFixture):
         for model_id in catalog_ids:
             self.assertIn(model_id, admin_script)
 
+    def test_kimi_k3_uses_low_reasoning_effort_and_completion_token_limit(self) -> None:
+        client = ModelMessageClient(ModelConfig(
+            provider="openai_compatible",
+            api_key="sk-kimi-test",
+            model_id="kimi-k3",
+            base_url="https://api.moonshot.cn/v1",
+            timeout_seconds=60,
+            max_tokens=4096,
+            temperature=1,
+        ))
+        captured: dict[str, Any] = {}
+
+        def fake_request(url: str, payload: dict, headers: dict[str, str]) -> dict:
+            captured.update(url=url, payload=payload, headers=headers)
+            return {"choices": [{"message": {"content": "连接成功"}}], "usage": {}}
+
+        client._request_json = fake_request  # type: ignore[method-assign]
+        result = client.create("系统提示", [{"role": "user", "content": "你好"}])
+
+        self.assertEqual(captured["url"], "https://api.moonshot.cn/v1/chat/completions")
+        self.assertEqual(captured["payload"]["reasoning_effort"], "low")
+        self.assertEqual(captured["payload"]["max_completion_tokens"], 4096)
+        self.assertNotIn("max_tokens", captured["payload"])
+        self.assertEqual(result["content"][0]["text"], "连接成功")
+
+        normalized = ModelMessageClient._normalize_openai({
+            "choices": [{"message": {
+                "reasoning_content": "需要先查电影资料",
+                "content": None,
+                "tool_calls": [{
+                    "id": "call-kimi-1",
+                    "function": {"name": "search_movie", "arguments": '{"query":"星际穿越"}'},
+                }],
+            }}],
+            "usage": {},
+        })
+        converted = ModelMessageClient._openai_messages([
+            {"role": "assistant", "content": normalized["content"]},
+            {"role": "user", "content": [{
+                "type": "tool_result",
+                "tool_use_id": "call-kimi-1",
+                "content": '{"title_zh":"星际穿越"}',
+            }]},
+        ])
+        self.assertEqual(converted[0]["reasoning_content"], "需要先查电影资料")
+        self.assertEqual(converted[0]["tool_calls"][0]["id"], "call-kimi-1")
+        self.assertEqual(converted[1]["tool_call_id"], "call-kimi-1")
+
     def test_admin_base_url_pickers_offer_presets_and_custom_urls(self) -> None:
         admin_html = (PRODUCT_DIR / "web" / "admin.html").read_text(encoding="utf-8")
         admin_script = (PRODUCT_DIR / "web" / "admin.js").read_text(encoding="utf-8")
@@ -1130,10 +1178,11 @@ class AgentConfigurationTests(ProductFixture):
             self.assertIn(base_url, admin_script)
         self.assertIn('const CUSTOM_BASE_URL = "__custom__"', admin_script)
         self.assertIn("全部厂家始终显示并按协议分组", admin_html)
-        self.assertIn('admin.js?v=27', admin_html)
+        self.assertIn('admin.js?v=28', admin_html)
         self.assertIn('id="model-state-classifier-id"', admin_html)
         self.assertIn('id="model-state-classifier-enabled"', admin_html)
         self.assertIn('movie_state_auto_enabled: $("#model-state-classifier-enabled").checked', admin_script)
+        self.assertIn('$("#model-max-tokens").value = "4096"', admin_script)
         self.assertIn('$("#model-temperature").value = "1"', admin_script)
 
     def test_stage_thirty_nine_admin_prompt_and_skill_management_use_name_selectors(self) -> None:
@@ -1153,7 +1202,7 @@ class AgentConfigurationTests(ProductFixture):
         self.assertIn("button.dataset.skillTarget = skill.skill_key", admin_script)
         self.assertIn(".management-selector.is-active", admin_css)
         self.assertIn('/admin.css?v=20', admin_html)
-        self.assertIn('/admin.js?v=27', admin_html)
+        self.assertIn('/admin.js?v=28', admin_html)
 
     def test_stage_forty_three_skill_editor_focuses_on_instructions(self) -> None:
         admin_html = (PRODUCT_DIR / "web" / "admin.html").read_text(encoding="utf-8")
@@ -1168,7 +1217,7 @@ class AgentConfigurationTests(ProductFixture):
         self.assertIn("input_contract: inputContract", admin_script)
         self.assertIn("output_contract: outputContract", admin_script)
         self.assertIn('/admin.css?v=20', admin_html)
-        self.assertIn('/admin.js?v=27', admin_html)
+        self.assertIn('/admin.js?v=28', admin_html)
 
     def test_stage_forty_two_current_docs_match_server_chat_persistence(self) -> None:
         app_script = (PRODUCT_DIR / "web" / "app.js").read_text(encoding="utf-8")
@@ -1216,7 +1265,7 @@ class AgentConfigurationTests(ProductFixture):
         self.assertIn("panel.hidden = panel.dataset.apiPanel !== apiKey", admin_script)
         self.assertIn(".api-selector-list .management-selector", admin_css)
         self.assertIn('/admin.css?v=20', admin_html)
-        self.assertIn('/admin.js?v=27', admin_html)
+        self.assertIn('/admin.js?v=28', admin_html)
 
     def test_model_manufacturer_picker_groups_all_protocols_and_switches_automatically(self) -> None:
         admin_html = (PRODUCT_DIR / "web" / "admin.html").read_text(encoding="utf-8")

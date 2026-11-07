@@ -435,6 +435,11 @@ class ModelMessageClient:
             "messages": [{"role": "system", "content": system}]
             + self._openai_messages(messages),
         }
+        base_host = (urlparse(self.config.base_url).hostname or "").lower()
+        if base_host in {"api.moonshot.cn", "api.moonshot.ai"} and self.config.model_id.startswith("kimi-k3"):
+            payload["max_completion_tokens"] = payload.pop("max_tokens")
+            # K3 always reasons; low effort keeps an interactive chat responsive.
+            payload["reasoning_effort"] = "low"
         if tools:
             payload["tools"] = [
                 {
@@ -504,6 +509,11 @@ class ModelMessageClient:
                     for block in content
                     if block.get("type") == "text"
                 )
+                reasoning = "".join(
+                    str(block.get("text", ""))
+                    for block in content
+                    if block.get("type") == "reasoning"
+                )
                 tool_calls = [
                     {
                         "id": block["id"],
@@ -517,6 +527,8 @@ class ModelMessageClient:
                     if block.get("type") == "tool_use"
                 ]
                 item: dict[str, Any] = {"role": "assistant", "content": text or None}
+                if reasoning:
+                    item["reasoning_content"] = reasoning
                 if tool_calls:
                     item["tool_calls"] = tool_calls
                 converted.append(item)
@@ -540,6 +552,8 @@ class ModelMessageClient:
             raise RuntimeError("模型响应中没有可用内容")
         message = choices[0].get("message") or {}
         content: list[dict[str, Any]] = []
+        if message.get("reasoning_content"):
+            content.append({"type": "reasoning", "text": str(message["reasoning_content"])})
         if message.get("content"):
             content.append({"type": "text", "text": str(message["content"])})
         for call in message.get("tool_calls") or []:
